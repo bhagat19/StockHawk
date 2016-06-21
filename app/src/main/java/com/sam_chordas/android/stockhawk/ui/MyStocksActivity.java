@@ -53,6 +53,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Cursor mCursor;
   boolean isConnected;
 
+    public MyStocksActivity(){
+        mContext = MyStocksActivity.this;
+    }
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -110,13 +113,13 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                     Toast toast =
                         Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
                             Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, Gravity.CENTER, 0);
+                 //   toast.setGravity(Gravity.CENTER, Gravity.CENTE, 0);
                     toast.show();
                     return;
                   } else {
                     // Add the stock to DB
                     mServiceIntent.putExtra("tag", "add");
-                    mServiceIntent.putExtra("symbol", input.toString());
+                    mServiceIntent.putExtra("symbol", input.toString().toUpperCase());
                     startService(mServiceIntent);
                   }
                 }
@@ -172,6 +175,15 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     actionBar.setDisplayShowTitleEnabled(true);
     actionBar.setTitle(mTitle);
   }
+
+    public void showToast(final String toast){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(mContext,toast,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
