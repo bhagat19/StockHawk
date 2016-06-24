@@ -57,9 +57,11 @@ public class StockTaskService extends GcmTaskService{
       mContext = this;
     }
     StringBuilder urlStringBuilder = new StringBuilder();
+      StringBuilder historicalBuilder = new StringBuilder();
     try{
       // Base URL for the Yahoo query
       urlStringBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
+        historicalBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
       urlStringBuilder.append(URLEncoder.encode("select * from yahoo.finance.quotes where symbol "
         + "in (", "UTF-8"));
     } catch (UnsupportedEncodingException e) {
@@ -97,12 +99,33 @@ public class StockTaskService extends GcmTaskService{
       isUpdate = false;
       // get symbol from params.getExtra and build query
       String stockInput = params.getExtras().getString("symbol");
+
       try {
         urlStringBuilder.append(URLEncoder.encode("\""+stockInput+"\")", "UTF-8"));
       } catch (UnsupportedEncodingException e){
         e.printStackTrace();
       }
     }
+    else if (params.getTag().equals("history")){
+
+
+        String symbol = params.getExtras().getString("symbol");
+        Log.v(LOG_TAG,"inside history tag "+symbol);
+
+        try {
+            historicalBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata where symbol "
+                    + "in ( \'" + symbol + " \') and startDate= \'2016-03-01\' and endDate=\'2016-06-01\'", "UTF-8"));
+         //   historicalBuilder.append(URLEncoder.encode("\""+symbol+"\")", "UTF-8"));
+
+
+        }catch (UnsupportedEncodingException e){
+            e.printStackTrace();
+        }
+
+    }
+      historicalBuilder.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
+              + "org%2Falltableswithkeys&callback=");
+      Log.v(LOG_TAG, "historicalUrl " + historicalBuilder.toString());
     // finalize the URL for the API query.
     urlStringBuilder.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
         + "org%2Falltableswithkeys&callback=");

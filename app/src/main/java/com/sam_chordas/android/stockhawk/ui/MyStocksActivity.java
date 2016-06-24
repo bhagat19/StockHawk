@@ -15,6 +15,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   private Context mContext;
   private Cursor mCursor;
   boolean isConnected;
+    String LOG_TAG = MyStocksActivity.class.getSimpleName();
 
     public MyStocksActivity(){
         mContext = MyStocksActivity.this;
@@ -88,9 +90,22 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
             new RecyclerViewItemClickListener.OnItemClickListener() {
               @Override public void onItemClick(View v, int position) {
                 //TODO:
+                Cursor cursor = mCursorAdapter.getCursor();
+                  cursor.moveToPosition(position);
+                  String symbol = cursor.getString(cursor.getColumnIndex("symbol"));
 
+                  Log.v(LOG_TAG, "symbol " + symbol);
 
-                // do something on item click
+                  mServiceIntent.putExtra("tag", "history");
+                  mServiceIntent.putExtra("historicalSymbol", symbol);
+
+                  startService(mServiceIntent);
+
+                  // do something on item click
+         /*         Intent intent = new Intent(getBaseContext(),StockDetailActivity.class);
+                  startActivity(intent);
+*/
+
               }
             }));
     recyclerView.setAdapter(mCursorAdapter);

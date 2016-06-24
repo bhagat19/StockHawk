@@ -33,6 +33,9 @@ public class StockIntentService extends IntentService {
           args.putString("symbol", intent.getStringExtra("symbol"));
 
       }
+      else if (intent.getStringExtra("tag").equals("history")){
+          args.putString("symbol",intent.getStringExtra("historicalSymbol"));
+      }
 
 
 
