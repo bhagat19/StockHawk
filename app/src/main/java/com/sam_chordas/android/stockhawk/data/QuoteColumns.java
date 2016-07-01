@@ -21,7 +21,9 @@ public class QuoteColumns {
   public static final String BIDPRICE = "bid_price";
   @DataType(DataType.Type.TEXT)
   public static final String CREATED = "created";
-  @DataType(DataType.Type.INTEGER) @NotNull
+    @DataType(DataType.Type.TEXT)
+    public static final String NAME = "Name";
+    @DataType(DataType.Type.INTEGER)
   public static final String ISUP = "is_up";
   @DataType(DataType.Type.INTEGER) @NotNull
   public static final String ISCURRENT = "is_current";
