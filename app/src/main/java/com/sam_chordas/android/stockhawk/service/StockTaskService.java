@@ -122,7 +122,7 @@ public class StockTaskService extends GcmTaskService{
 
           try {
               historicalBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata where symbol "
-                      + "in ( \'" + symbol + "\') and startDate= \'2016-05-01\' and endDate=\'2016-06-01\'", "UTF-8"));
+                      + "in ( \'" + symbol + "\') and startDate= \'2016-06-25\' and endDate=\'2016-06-30\'", "UTF-8"));
               //   historicalBuilder.append(URLEncoder.encode("\""+symbol+"\")", "UTF-8"));
 
 

@@ -98,7 +98,7 @@ public class HistUtils {
                        //     entryDate.getTime();
                        //     long longDate =
                             Entry entry = new Entry(Float.parseFloat(entryArray.getJSONObject(i).getString("Close")),
-                                    Integer.parseInt(String.valueOf(time)));
+                                    i);
                             yVals.add(entry);
 
                         }catch(ParseException | NumberFormatException pe){

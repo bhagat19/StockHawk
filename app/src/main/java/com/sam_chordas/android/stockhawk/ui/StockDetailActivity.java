@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.sam_chordas.android.stockhawk.R;
+import com.sam_chordas.android.stockhawk.rest.HistoricalQuote;
 import com.sam_chordas.android.stockhawk.service.StockIntentService;
 import com.sam_chordas.android.stockhawk.service.StockTaskService;
 
@@ -49,16 +50,19 @@ public class StockDetailActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_line_graph);
 
         Intent intent = getIntent();
-       ArrayList<Entry> entryArrayList = intent.getExtras().getParcelable("HistoricalQuote");
-
+        /*
+       HistoricalQuote item = intent.getExtras().getParcelable("HistoricalQuote");
+        Log.v(LOG_TAG,"item in DetailActivity "+item);
+      ArrayList<Entry> entryArrayList =new ArrayList<Entry>();
+*/
         String symbol = intent.getStringExtra("symbol");
 
         name = intent.getStringExtra("name");
-        Log.v(LOG_TAG,"entryArrayList,symbol,name"+entryArrayList+symbol+name);
+   //     Log.v(LOG_TAG,"entryArrayList,symbol,name"+entryArrayList+symbol+name);
 
 
         chart = (LineChart) findViewById(R.id.linechart);
-   //     PlotGraph(chart,entryArrayList,name);
+//       PlotGraph(chart,entryArrayList,name);
 
 /*
         mServiceIntent = new Intent(this, StockIntentService.class);
@@ -78,6 +82,8 @@ public class StockDetailActivity extends AppCompatActivity  {
 
         ArrayList<String> xVals = new ArrayList<String>();
         xVals.add("1.Q"); xVals.add("2.Q"); xVals.add("3.Q"); xVals.add("4.Q");
+        xVals.add("5.Q"); xVals.add("6.Q"); xVals.add("7.Q");
+
         LineData lineData = new LineData(xVals,iLineDataSet);
         chart.setData(lineData);
         chart.invalidate();
@@ -93,11 +99,12 @@ public class StockDetailActivity extends AppCompatActivity  {
     {
         @Override
         public void onReceive(Context context, Intent intent){
+
            Bundle bundle = intent.getExtras();
-           ArrayList<Entry> enterArrayList = bundle.getParcelable("HistoricalQuote");
+           HistoricalQuote item= bundle.getParcelable("HistoricalQuote");
+            ArrayList<Entry> enterArrayList = item.getEntryArrayList();
             Log.v(LOG_TAG,"enterArrayList "+enterArrayList);
             StockDetailActivity.PlotGraph(chart,enterArrayList,name);
-
 
         }
 

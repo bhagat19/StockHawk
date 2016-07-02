@@ -3,16 +3,10 @@ package com.sam_chordas.android.stockhawk.rest;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.github.mikephil.charting.data.ChartData;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-/**
- * Created by amit on 30-06-2016.
- */
 public class HistoricalQuote implements Parcelable {
 
     ArrayList<Entry> entryArrayList = new ArrayList<>();
@@ -22,9 +16,17 @@ public class HistoricalQuote implements Parcelable {
 
     }
 
+    public ArrayList<Entry> getEntryArrayList() {
+        return entryArrayList;
+    }
 
     protected HistoricalQuote(Parcel in) {
-        entryArrayList = (ArrayList) in.readValue(ArrayList.class.getClassLoader());
+        if (in.readByte() == 0x01) {
+            entryArrayList = new ArrayList<Entry>();
+            in.readList(entryArrayList, Entry.class.getClassLoader());
+        } else {
+            entryArrayList = null;
+        }
     }
 
     @Override
@@ -32,10 +34,14 @@ public class HistoricalQuote implements Parcelable {
         return 0;
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(entryArrayList);
+        if (entryArrayList == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(entryArrayList);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -46,7 +52,8 @@ public class HistoricalQuote implements Parcelable {
         }
 
         @Override
-        public HistoricalQuote[] newArray(int size) {return new HistoricalQuote[size];
+        public HistoricalQuote[] newArray(int size) {
+            return new HistoricalQuote[size];
         }
     };
 }
