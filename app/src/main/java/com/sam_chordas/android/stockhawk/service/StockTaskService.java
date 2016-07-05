@@ -18,6 +18,7 @@ import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 import com.sam_chordas.android.stockhawk.rest.HistUtils;
 import com.sam_chordas.android.stockhawk.rest.HistoricalQuote;
+import com.sam_chordas.android.stockhawk.rest.QuoteCursorAdapter;
 import com.sam_chordas.android.stockhawk.rest.Utils;
 import com.sam_chordas.android.stockhawk.ui.StockDetailActivity;
 import com.squareup.okhttp.OkHttpClient;
@@ -161,6 +162,9 @@ public class StockTaskService extends GcmTaskService{
                       if (contentProviderOperations != null && contentProviderOperations.size() != 0) {
                           mContext.getContentResolver().applyBatch(QuoteProvider.AUTHORITY,
                                   contentProviderOperations);
+                        //Broadcast for widget receiver
+                          Intent dataUpdatedIntent = new Intent(QuoteCursorAdapter.ACTION_DATA_UPDATED).setPackage(mContext.getPackageName());
+                          mContext.sendBroadcast(dataUpdatedIntent);
                       }
                   } catch (RemoteException | OperationApplicationException e) {
                       e.printStackTrace();

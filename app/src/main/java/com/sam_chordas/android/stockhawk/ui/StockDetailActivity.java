@@ -40,13 +40,11 @@ public class StockDetailActivity extends AppCompatActivity  {
   //  ArrayList<Entry> entryArrayList;
 
     public void onCreate(Bundle savedInstance){
+        super.onCreate(savedInstance);
         myReceiver = new MyReceiver();
 
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(StockTaskService.MY_ACTION);
-        registerReceiver(myReceiver, intentFilter);
 
-        super.onCreate(savedInstance);
+
         setContentView(R.layout.activity_line_graph);
 
         Intent intent = getIntent();
@@ -73,6 +71,13 @@ public class StockDetailActivity extends AppCompatActivity  {
 
     }
 
+    @Override
+    public void onStop(){
+
+        unregisterReceiver(myReceiver);
+        super.onStop();
+    }
+
     public static void PlotGraph(LineChart chart, ArrayList<Entry> entryArrayList,String name){
 
         LineDataSet entryDataSet = new LineDataSet(entryArrayList,name);
@@ -92,6 +97,10 @@ public class StockDetailActivity extends AppCompatActivity  {
     @Override
     public void onResume(){
         super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(StockTaskService.MY_ACTION);
+        registerReceiver(myReceiver, intentFilter);
     }
 
 
