@@ -25,8 +25,10 @@ public class StockWidgetProvider extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int AppWidgetId){
 
+
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.stock_widget);
         views.setRemoteAdapter(R.id.widget_list, new Intent(context, WidgetService.class));
+        appWidgetManager.updateAppWidget(AppWidgetId,views);
 
         // Create an Intent to launch MainActivity on clicking heading
         Intent intent = new Intent(context, MyStocksActivity.class);

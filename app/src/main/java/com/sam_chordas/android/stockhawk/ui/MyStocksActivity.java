@@ -69,6 +69,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     isConnected = activeNetwork != null &&
         activeNetwork.isConnectedOrConnecting();
     setContentView(R.layout.activity_my_stocks);
+    //  if (!isConnected)
     // The intent service is for executing immediate pulls from the Yahoo API
     // GCMTaskService can only schedule tasks, they cannot execute immediately
     mServiceIntent = new Intent(this, StockIntentService.class);
@@ -92,8 +93,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                 //TODO:
                 Cursor cursor = mCursorAdapter.getCursor();
                   cursor.moveToPosition(position);
-                  String symbol = cursor.getString(cursor.getColumnIndex("symbol"));
-                  String name = cursor.getString(cursor.getColumnIndex("Name"));
+                  String symbol = cursor.getString(cursor.getColumnIndex(mContext.getString(R.string.stock_symbol)));
+                  String name = cursor.getString(cursor.getColumnIndex(mContext.getString(R.string.stock_name)));
 
                   Log.v(LOG_TAG, "symbol,name" + symbol + name);
 
@@ -135,7 +136,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                       new String[] { input.toString().toUpperCase() }, null);
                   if (c.getCount() != 0) {
                     Toast toast =
-                        Toast.makeText(MyStocksActivity.this, "This stock is already saved!",
+                        Toast.makeText(MyStocksActivity.this, mContext.getString(R.string.saved_stock_toast),
                             Toast.LENGTH_LONG);
                  //   toast.setGravity(Gravity.CENTER, Gravity.CENTE, 0);
                     toast.show();
@@ -186,6 +187,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
   @Override
   public void onResume() {
     super.onResume();
+      if (!isConnected){
+          networkToast();
+      }
     getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
   }
 

@@ -4,12 +4,17 @@
   <string name="action_example">Example action</string>
 
   <string name="action_settings">Settings</string>
+    <string name ="stock_symbol">symbol</string>
+    <string name ="stock_name">Name</string>
   <string name="action_change_units">Change Units</string>
   <string name="symbol_search">Symbol Search</string>
   <string name="content_test">Search for a Stock Symbol</string>
   <string name="input_hint">FB</string>
   <string name="input_prefill"></string>
-  <string name="network_toast">Uh-oh! This app requires an internet connection</string>
+
+    <!--Stocks Issue -->
+    <string name="saved_stock_toast">This stock is already saved!</string>
+  <string name="network_toast">Uh-oh! This app requires an internet connection,Stocks shown,if any might be out of date</string>
     <string name="empty_stocks_list">There are no stocks to display.Add a stock to display.</string>
 
     <!-- A11y -->

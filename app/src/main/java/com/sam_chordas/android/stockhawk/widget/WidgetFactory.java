@@ -3,6 +3,7 @@ package com.sam_chordas.android.stockhawk.widget;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Binder;
 import android.os.Build;
 import android.util.Log;
 import android.widget.AdapterView;
@@ -30,7 +31,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
             QuoteColumns.BIDPRICE,
             QuoteColumns.PERCENT_CHANGE,
             QuoteColumns.CHANGE,
-            QuoteColumns.ISUP
+            QuoteColumns.ISCURRENT
     };
 
     static final int INDEX_QUOTE_ID=0;
@@ -38,7 +39,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     static final int INDEX_QUOTE_BIDPRICE =2;
     static final int INDEX_QUOTE_PERCENT_CHANGE =3;
     static final int INDEX_QUOTE_CHANGE =4;
-    static final int INDEX_QUOTE_ISUP =5;
+    static final int INDEX_QUOTE_ISCURRENT =5;
 
     public WidgetFactory(Context context, Intent intent){
         this.mContext = context;
@@ -49,13 +50,20 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
         if (mCursor != null){
             mCursor.close();
         }
+        //http://stackoverflow.com/questions/13187284/android-permission-denial-in-widget-remoteviewsfactory-for-content
+        final long token = Binder.clearCallingIdentity();
+        try {
+             mCursor = mContext.getContentResolver().query(
+                    QuoteProvider.Quotes.CONTENT_URI,
+                    STOCK_COLUMNS,
+                    QuoteColumns.ISCURRENT + " = ?",
+                    new String[]{"1"},
+                    null);
+        } finally {
+            Binder.restoreCallingIdentity(token);
+        }
 
-        mCursor = mContext.getContentResolver().query(
-                QuoteProvider.Quotes.CONTENT_URI,
-                STOCK_COLUMNS,
-                QuoteColumns.ISUP + " = ?",
-                new String[]{"1"},
-                null);
+
     };
 
 
@@ -99,7 +107,7 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
                 remoteViews.setContentDescription(R.id.change, mContext.getString(R.string.a11y_change, change));
             }
 
-            if (mCursor.getString(INDEX_QUOTE_ISUP).equals("1")) {
+            if (mCursor.getString(INDEX_QUOTE_ISCURRENT).equals("1")) {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
             } else {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);

@@ -5,8 +5,7 @@
               android:layout_height="72dp"
               android:gravity="center_vertical"
               android:orientation="horizontal"
-              android:paddingLeft="16dp"
-              android:paddingRight="16dp"
+
               android:paddingStart="16dp"
               android:paddingEnd="16dp"
               android:id="@+id/widget_list_item"
@@ -19,7 +18,7 @@
         style="@style/StockSymbolTextStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left|center_vertical"
+        android:gravity="start|center_vertical"
         android:textColor="@color/material_black_color"
         tools:text="GOOG"
         />
@@ -27,7 +26,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:gravity="end|right"
+        android:gravity="end"
         android:orientation="horizontal"
         >
         <TextView
@@ -35,7 +34,7 @@
             style="@style/BidPriceTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingRight="10sp"
+
             android:paddingEnd="10sp"
             android:textColor="@color/material_black_color"
             tools:text="1000.00"
@@ -46,8 +45,8 @@
             style="@style/PercentChangeTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
+            android:paddingStart="3dp"
+
 
             android:paddingEnd="3dp"
             tools:text="100%"
