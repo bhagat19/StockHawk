@@ -138,53 +138,5 @@ public class HistUtils {
         return builder.build();
     }
 
-    public static ArrayList<Entry> buildHistoricalUrl(String symbol) {
 
-        historicalBuilder.append("https://query.yahooapis.com/v1/public/yql?q=");
-
-
-        try {
-            historicalBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata where symbol "
-                    + "in ( \'" + symbol + "\') and startDate= \'2016-06-25\' and endDate=\'2016-06-30\'", "UTF-8"));
-            //   historicalBuilder.append(URLEncoder.encode("\""+symbol+"\")", "UTF-8"));
-
-
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        historicalBuilder.append("&format=json&diagnostics=true&env=store%3A%2F%2Fdatatables."
-                + "org%2Falltableswithkeys&callback=");
-        Log.v(LOG_TAG, "historicalUrl " + historicalBuilder.toString());
-
-        String histUrlString;
-
-        int hResult = GcmNetworkManager.RESULT_FAILURE;
-        if (historicalBuilder != null) {
-            String hResponse;
-            histUrlString = historicalBuilder.toString();
-            try {
-                hResponse = fetchData(histUrlString);
-                Log.v(LOG_TAG, "response from Api within HistUtils " + hResponse);
-        //        hResult = GcmNetworkManager.RESULT_SUCCESS;
-                ComputeHistoricalData(hResponse);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-
-
-
-
-    public static String fetchData(String url) throws IOException {
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        Response response = client.newCall(request).execute();
-        return response.body().string();
-    }
 }
