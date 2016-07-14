@@ -37,7 +37,7 @@ public class StockDetailActivity extends AppCompatActivity  {
     final String LOG_TAG = StockDetailActivity.class.getSimpleName();
     static String name;
     static LineChart chart;
-  //  ArrayList<Entry> entryArrayList;
+  public static ArrayList<Entry> entryArrayList = new ArrayList<>();
 
     public void onCreate(Bundle savedInstance){
         super.onCreate(savedInstance);
@@ -46,21 +46,28 @@ public class StockDetailActivity extends AppCompatActivity  {
 
 
         setContentView(R.layout.activity_line_graph);
-
         Intent intent = getIntent();
+
+ //       Bundle bundle = intent.getExtras();
+   //     HistoricalQuote item= bundle.getParcelable("entryList");
+
+
         /*
        HistoricalQuote item = intent.getExtras().getParcelable("HistoricalQuote");
         Log.v(LOG_TAG,"item in DetailActivity "+item);
       ArrayList<Entry> entryArrayList =new ArrayList<Entry>();
 */
         String symbol = intent.getStringExtra("symbol");
+  //      entryArrayList = item.getEntryArrayList();
 
-        name = intent.getStringExtra("name");
-   //     Log.v(LOG_TAG,"entryArrayList,symbol,name"+entryArrayList+symbol+name);
+        name = intent.getStringExtra("Name");
+        Log.v(LOG_TAG,"symbol,name"+symbol+name);
+       HistoricalQuote item = new HistoricalQuote(entryArrayList);
+        Log.v(LOG_TAG,"entryArrayList befre main call" +entryArrayList);
 
 
         chart = (LineChart) findViewById(R.id.linechart);
-//       PlotGraph(chart,entryArrayList,name);
+       PlotGraph(chart,entryArrayList,name);
 
 /*
         mServiceIntent = new Intent(this, StockIntentService.class);
@@ -69,7 +76,9 @@ public class StockDetailActivity extends AppCompatActivity  {
         startActivity(intent);
         */
 
+
     }
+
 
     @Override
     public void onStop(){
@@ -78,7 +87,7 @@ public class StockDetailActivity extends AppCompatActivity  {
         super.onStop();
     }
 
-    public static void PlotGraph(LineChart chart, ArrayList<Entry> entryArrayList,String name){
+    public static void PlotGraph(LineChart chart, ArrayList<Entry> entryArrayList,String name) {
 
         LineDataSet entryDataSet = new LineDataSet(entryArrayList,name);
       //  entryDataSet.setAxisDependency();
@@ -111,9 +120,9 @@ public class StockDetailActivity extends AppCompatActivity  {
 
            Bundle bundle = intent.getExtras();
            HistoricalQuote item= bundle.getParcelable("HistoricalQuote");
-            ArrayList<Entry> enterArrayList = item.getEntryArrayList();
-            Log.v(LOG_TAG,"enterArrayList "+enterArrayList);
-            StockDetailActivity.PlotGraph(chart,enterArrayList,name);
+            StockDetailActivity.entryArrayList = item.getEntryArrayList();
+            Log.v(LOG_TAG,"enterArrayList "+StockDetailActivity.entryArrayList);
+            StockDetailActivity.PlotGraph(chart,StockDetailActivity.entryArrayList,name);
 
         }
 

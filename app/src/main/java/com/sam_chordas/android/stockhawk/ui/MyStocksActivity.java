@@ -86,7 +86,9 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     getLoaderManager().initLoader(CURSOR_LOADER_ID, null, this);
 
-    mCursorAdapter = new QuoteCursorAdapter(this, null);
+
+
+      mCursorAdapter = new QuoteCursorAdapter(this, null);
     recyclerView.addOnItemTouchListener(new RecyclerViewItemClickListener(this,
             new RecyclerViewItemClickListener.OnItemClickListener() {
               @Override public void onItemClick(View v, int position) {
@@ -108,10 +110,12 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
 
                   // do something on item click
+
                   Intent intent = new Intent(getBaseContext(),StockDetailActivity.class);
                   intent.putExtra("symbol",symbol);
                   intent.putExtra("name",name);
                   startActivity(intent);
+
 
 
               }
@@ -140,6 +144,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                             Toast.LENGTH_LONG);
                  //   toast.setGravity(Gravity.CENTER, Gravity.CENTE, 0);
                     toast.show();
+
                     return;
                   } else {
                     // Add the stock to DB
@@ -193,6 +198,13 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
   }
 
+    @Override
+    public void onPause(){
+
+        Intent dataUpdatedIntent = new Intent(QuoteCursorAdapter.ACTION_DATA_UPDATED).setPackage(mContext.getPackageName());
+        mContext.sendBroadcast(dataUpdatedIntent);
+        super.onPause();
+    }
   public void networkToast(){
     Toast.makeText(mContext, getString(R.string.network_toast), Toast.LENGTH_SHORT).show();
   }

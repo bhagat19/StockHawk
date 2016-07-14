@@ -1,5 +1,6 @@
 package com.sam_chordas.android.stockhawk.widget;
 
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,9 +11,16 @@ import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.github.mikephil.charting.data.Entry;
 import com.sam_chordas.android.stockhawk.R;
 import com.sam_chordas.android.stockhawk.data.QuoteColumns;
 import com.sam_chordas.android.stockhawk.data.QuoteProvider;
+import com.sam_chordas.android.stockhawk.rest.HistUtils;
+import com.sam_chordas.android.stockhawk.rest.HistoricalQuote;
+import com.sam_chordas.android.stockhawk.service.StockIntentService;
+import com.sam_chordas.android.stockhawk.service.StockTaskService;
+
+import java.util.ArrayList;
 
 /**
  * Created by amit on 04-07-2016.
@@ -20,10 +28,11 @@ import com.sam_chordas.android.stockhawk.data.QuoteProvider;
 public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
 
     final String LOG_TAG = WidgetFactory.class.getSimpleName();
-
+    Intent mServiceIntent;
     Cursor mCursor;
     Context mContext;
     Intent mIntent;
+    ArrayList<Entry>  entryArrayList = new ArrayList<>();
 
     static final String[] STOCK_COLUMNS ={
             QuoteColumns._ID,
@@ -31,7 +40,9 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
             QuoteColumns.BIDPRICE,
             QuoteColumns.PERCENT_CHANGE,
             QuoteColumns.CHANGE,
-            QuoteColumns.ISCURRENT
+            QuoteColumns.ISCURRENT,
+            QuoteColumns.NAME,
+            QuoteColumns.ISUP
     };
 
     static final int INDEX_QUOTE_ID=0;
@@ -40,6 +51,8 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
     static final int INDEX_QUOTE_PERCENT_CHANGE =3;
     static final int INDEX_QUOTE_CHANGE =4;
     static final int INDEX_QUOTE_ISCURRENT =5;
+    static final int INDEX_QUOTE_NAME=6;
+    static final int INDEX_QUOTE_ISUP=7;
 
     public WidgetFactory(Context context, Intent intent){
         this.mContext = context;
@@ -107,24 +120,41 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
                 remoteViews.setContentDescription(R.id.change, mContext.getString(R.string.a11y_change, change));
             }
 
-            if (mCursor.getString(INDEX_QUOTE_ISCURRENT).equals("1")) {
+            if (mCursor.getString(INDEX_QUOTE_ISUP).equals("1")) {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_green);
             } else {
                 remoteViews.setInt(R.id.change, "setBackgroundResource", R.drawable.percent_change_pill_red);
             }
 
-            /*
 
+
+
+
+
+        //    entryArrayList = HistUtils.buildHistoricalUrl(mCursor.getString(INDEX_QUOTE_SYMBOL));
+          //  HistoricalQuote item = new HistoricalQuote(entryArrayList);
             Intent newIntent = new Intent();
 
+
             newIntent.putExtra("symbol", mCursor.getString(INDEX_QUOTE_SYMBOL));
+            newIntent.putExtra("Name", mCursor.getString(INDEX_QUOTE_NAME));
+         //   newIntent.putExtra("entryList",item);
+          //  newIntent.setAction(StockTaskService.MY_ACTION);
+           // mContext.sendBroadcast(newIntent);
+
+
+
+    //        newIntent.putExtra("tag", "history");
+    //        mServiceIntent.putExtra("historicalSymbol", symbol);
+            Log.v(LOG_TAG, "symbol, Name" + mCursor.getString(INDEX_QUOTE_SYMBOL) + mCursor.getString(INDEX_QUOTE_NAME));
             // In setOnClickFillIntent method, the ID to be passed is of the Rootview
             // of the layout passed in the remote view - above, i.e. rootview of the list_item_quote.
             remoteViews.setOnClickFillInIntent(R.id.widget_list_item, newIntent);
+      //      mContext.startActivity(newIntent);
+
 
         }
-        */
-        }
+
         return  remoteViews;
 
     }

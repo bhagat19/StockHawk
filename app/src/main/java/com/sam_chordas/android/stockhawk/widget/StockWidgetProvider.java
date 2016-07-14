@@ -28,7 +28,6 @@ public class StockWidgetProvider extends AppWidgetProvider {
 
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.stock_widget);
         views.setRemoteAdapter(R.id.widget_list, new Intent(context, WidgetService.class));
-        appWidgetManager.updateAppWidget(AppWidgetId,views);
 
         // Create an Intent to launch MainActivity on clicking heading
         Intent intent = new Intent(context, MyStocksActivity.class);
@@ -48,6 +47,9 @@ public class StockWidgetProvider extends AppWidgetProvider {
         views.setPendingIntentTemplate(R.id.widget_list, clickPendingIntentTemplate);
         views.setEmptyView(R.id.widget_list, R.id.widget_empty);
 
+        appWidgetManager.updateAppWidget(AppWidgetId,views);
+
+
     }
 
 
@@ -56,7 +58,9 @@ public class StockWidgetProvider extends AppWidgetProvider {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
+            super.onUpdate(context,appWidgetManager,appWidgetIds);
         }
+
     }
 
     @Override
