@@ -27,7 +27,11 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by sam_chordas on 9/30/15.
@@ -42,6 +46,8 @@ public class StockTaskService extends GcmTaskService{
   private StringBuilder mStoredSymbols = new StringBuilder();
   private boolean isUpdate;
   public  final static String MY_ACTION = "com.sam_chordas.android.stockhawk.ui.StockDetailActivity.HistQuote";
+    //fetching data for past 30 days
+    public static int DAYS_TO_FETCH_DATA_FOR = 30;
 
   public StockTaskService(){}
 
@@ -123,8 +129,21 @@ public class StockTaskService extends GcmTaskService{
           Log.v(LOG_TAG, "inside history tag " + symbol);
 
           try {
+              DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+              Date todayDateObj = new Date();
+
+
+              Calendar c = Calendar.getInstance();
+              c.setTime(todayDateObj);
+              c.add(Calendar.DATE, -DAYS_TO_FETCH_DATA_FOR);
+              Date start = c.getTime();
+
+
+              String todayDate = df.format(todayDateObj).toString();
+              String startDate = df.format(start).toString();
+
               historicalBuilder.append(URLEncoder.encode("select * from yahoo.finance.historicaldata where symbol "
-                      + "in ( \'" + symbol + "\') and startDate= \'2016-06-25\' and endDate=\'2016-06-30\'", "UTF-8"));
+                      + "in ( \'" + symbol + "\') and startDate =  \'"+startDate+"\' and endDate=\'"+todayDate+"\'", "UTF-8"));
               //   historicalBuilder.append(URLEncoder.encode("\""+symbol+"\")", "UTF-8"));
 
 
@@ -146,13 +165,16 @@ public class StockTaskService extends GcmTaskService{
                   hResult = GcmNetworkManager.RESULT_SUCCESS;
 
                   ArrayList<Entry> arrayEntry = HistUtils.ComputeHistoricalData(hResponse);
+                  ArrayList<String> dateArrayList = HistUtils.ComputeDateArrayForXvalues(hResponse);
                   Log.v(LOG_TAG,"inside Service "+arrayEntry);
+                  Log.v(LOG_TAG,"inside Service "+dateArrayList);
 
                 //parcelable HistoricalQuote item to send data to StockDetailActivity
-                  HistoricalQuote item = new HistoricalQuote(arrayEntry);
+                  HistoricalQuote item = new HistoricalQuote(arrayEntry,dateArrayList);
                   if (arrayEntry != null && arrayEntry.size() != 0 ){
                       Intent intent = new Intent();
                       intent.setAction(MY_ACTION);
+             //         intent.putExtra("symbol",symbol);
                       intent.putExtra("HistoricalQuote", item);
                       mContext.sendBroadcast(intent);
                   }

@@ -100,12 +100,14 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
 
                   Log.v(LOG_TAG, "symbol,name" + symbol + name);
 
-
+                /*
                   mServiceIntent.putExtra("tag", "history");
                   mServiceIntent.putExtra("historicalSymbol", symbol);
 
 
                   startService(mServiceIntent);
+
+                  */
 
 
 
@@ -151,7 +153,8 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
                     mServiceIntent.putExtra("tag", "add");
                     mServiceIntent.putExtra("symbol", input.toString().toUpperCase());
                     startService(mServiceIntent);
-                  }
+
+                    }
                 }
               })
               .show();
@@ -198,6 +201,7 @@ public class MyStocksActivity extends AppCompatActivity implements LoaderManager
     getLoaderManager().restartLoader(CURSOR_LOADER_ID, null, this);
   }
 
+    //To update widget once main activity is out of focus
     @Override
     public void onPause(){
 

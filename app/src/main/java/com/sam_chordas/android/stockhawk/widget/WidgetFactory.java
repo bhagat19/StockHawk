@@ -135,9 +135,13 @@ public class WidgetFactory implements RemoteViewsService.RemoteViewsFactory {
           //  HistoricalQuote item = new HistoricalQuote(entryArrayList);
             Intent newIntent = new Intent();
 
+    //        newIntent.putExtra("tag", "history");
+     //       newIntent.putExtra("historicalSymbol", symbol);
+
 
             newIntent.putExtra("symbol", mCursor.getString(INDEX_QUOTE_SYMBOL));
             newIntent.putExtra("Name", mCursor.getString(INDEX_QUOTE_NAME));
+
          //   newIntent.putExtra("entryList",item);
           //  newIntent.setAction(StockTaskService.MY_ACTION);
            // mContext.sendBroadcast(newIntent);
