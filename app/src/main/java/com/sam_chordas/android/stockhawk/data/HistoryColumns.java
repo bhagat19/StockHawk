@@ -23,6 +23,5 @@ public class HistoryColumns {
     public static final String SYMBOL = "symbol";
     @DataType(DataType.Type.TEXT) @NotNull
     public static final String CLOSEPRICE = "close_price";
-    @DataType(DataType.Type.TEXT) @NotNull
-    public static final String HISTORICALDATA ="historical_data";
+
 }
